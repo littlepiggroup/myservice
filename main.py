@@ -9,20 +9,16 @@ app = FastAPI(title="MyService API")
 PORT = int(os.getenv("PORT", 5000))
 
 @app.get("/")
-def read_root():
-    """根路径，返回基础信息"""
-    return {
-        "message": "Hello from LittlePigGroup!",
-        "service": "myservice",
-        "status": "running",
-        "region": os.getenv("FLY_REGION", "unknown"),  # Fly.io自动注入
-        "machine_id": os.getenv("FLY_ALLOC_ID", "unknown")
-    }
-
 @app.get("/health")
 def health_check():
-    """健康检查端点，Fly.io会自动探测此路径"""
-    return {"status": "healthy"}
+    """健康检查端点，支持根路径和 /health"""
+    return {
+        "status": "healthy",
+        "message": "Hello from LittlePigGroup!",
+        "service": "myservice",
+        "region": os.getenv("FLY_REGION", "unknown"),
+        "machine_id": os.getenv("FLY_ALLOC_ID", "unknown")
+    }
 
 @app.get("/info")
 def system_info():
