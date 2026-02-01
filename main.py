@@ -5,8 +5,8 @@ import platform
 
 app = FastAPI(title="MyService API")
 
-# 获取 Fly.io 设置的环境变量
-PORT = int(os.getenv("PORT", 8000))
+# 获取端口设置（Replit使用5000）
+PORT = int(os.getenv("PORT", 5000))
 
 @app.get("/")
 def read_root():

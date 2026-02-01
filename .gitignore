@@ -9,6 +9,10 @@ __pycache__/
 venv/
 env/
 .venv/
+*.egg-info/
+dist/
+build/
+.eggs/
 
 # Fly.io
 .fly/
@@ -22,3 +26,9 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Replit
+.pythonlibs/
+.cache/
+.local/
+.upm/
