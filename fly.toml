@@ -1,0 +1,39 @@
+# fly.toml
+app = "littlepiggroup-myservice"  # 应用名称，建议小写和破折号
+primary_region = "nrt"  # 香港区域，离中国近
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[build]
+  # 方法1: 指定Dockerfile
+  # dockerfile = "Dockerfile"
+  
+  # 方法2: 使用buildpacks自动检测
+  builder = "paketobuildpacks/builder:base"
+  # 可选：如果你明确知道语言，可以指定buildpack来加速，不指定则会自动检测
+  # buildpacks = ["gcr.io/paketo-buildpacks/go", "gcr.io/paketo-buildpacks/python"]
+  buildpacks = ["gcr.io/paketo-buildpacks/python"]]
+
+[env]
+  PORT = "8000"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  
+  [[http_service.ports]]
+    handlers = ["http"]
+    port = 80
+  [[http_service.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+  
+  [[http_service.http_checks]]
+    interval = 10000
+    timeout = 2000
+    grace_period = "5s"
+    method = "GET"
+    path = "/health"
