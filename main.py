@@ -1,13 +1,15 @@
 # main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Header
 import os
 import platform
+from misc.data_import.data_import import DataImporter
 
 app = FastAPI(title="MyService API")
 
 # 获取端口设置（Replit使用5000）
 PORT = int(os.getenv("PORT", 5000))
 
+DATA_IMPORTOR = DataImporter()
 
 @app.get("/")
 def read_root():
@@ -36,11 +38,19 @@ def system_info():
         "port": PORT
     }
 
+@app.post("/updateSheet")
+def updateSheet(sheet_update_x_token: str = Header(None)):
+    token = os.getenv("UPDATE_SHEET_TOKEN")
+    if token and sheet_update_x_token != token:
+        raise HTTPException(status_code=403, detail="Invalid token")
+    DATA_IMPORTOR.import_data()
+    return {"message": "success", "status": "completed"}
 
-@app.get("/env")
-def show_env():
-    """查看环境变量"""
-    return os.environ
+
+# @app.get("/env")
+# def show_env():
+#     """查看环境变量"""
+#     return os.environ
 
 
 if __name__ == "__main__":
